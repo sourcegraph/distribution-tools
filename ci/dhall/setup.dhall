@@ -1,25 +1,29 @@
 let GitHubActions = (./imports.dhall).GitHubActions
 
-let ASDFSteps =
-      [ GitHubActions.Step::{
-        , name = Some "Install asdf"
-        , uses = Some "asdf-vm/actions/setup@v1.0.1"
-        }
-      , GitHubActions.Step::{
-        , name = Some "Install asdf plugins"
-        , run = Some "./ci/asdf-add-plugins.sh"
-        }
-      , GitHubActions.Step::{
-        , name = Some "Install asdf tool versions and packages"
-        , run = Some "./ci/asdf-install.sh"
-        }
-      ]
-
 let Checkout =
       GitHubActions.Step::{
       , name = None Text
       , uses = Some "actions/checkout@v2"
       }
+
+let ASDFSteps =
+      [ GitHubActions.Step::{
+        , name = Some "[setup] Install asdf"
+        , uses = Some "asdf-vm/actions/setup@v1.0.1"
+        }
+      , GitHubActions.Step::{
+        , name = Some "[setup] Install asdf plugins"
+        , run = Some "./ci/asdf-add-plugins.sh"
+        }
+      , GitHubActions.Step::{
+        , name = Some "[setup] Install asdf .tool-versions"
+        , run = Some "./ci/asdf-install.sh"
+        }
+      , GitHubActions.Step::{
+        , name = Some "[setup] prepare go environment"
+        , run = Some "./ci/asdf-setup-go.sh"
+        }
+      ]
 
 let SetupSteps = [ Checkout ] # ASDFSteps
 
@@ -31,4 +35,17 @@ let Job =
         with steps = Some SetupSteps
       }
 
-in  { SetupSteps, Job }
+let JobArgs =
+      { Type = { name : Text, additionalSteps : List GitHubActions.Step.Type }
+      , default = {=}
+      }
+
+let MakeJob
+    : ∀(args : JobArgs.Type) → Job.Type
+    = λ(args : JobArgs.Type) →
+        Job::{
+        , name = Some args.name
+        , steps = SetupSteps # args.additionalSteps
+        }
+
+in  { SetupSteps, ASDFSteps, Job, MakeJob, JobArgs }

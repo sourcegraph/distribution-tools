@@ -4,11 +4,12 @@ let Setup = ../setup.dhall
 
 in  Setup.MakeJob
       Setup.JobArgs::{
-      , name = "shellcheck"
+      , name = "dhall-freeze"
       , additionalSteps =
         [ GitHubActions.Step::{
-          , name = Some "Lint shell scripts"
-          , run = Some "just shellcheck"
+          , name = Some "Check that dhall files are linted properly"
+          , run = Some "just freeze-dhall"
+          , env = Some (toMap { CHECK = "true" })
           }
         ]
       }

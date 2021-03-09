@@ -1,16 +1,29 @@
-all: build format lint
+all: build format lint freeze
 
 build: render-ci-pipeline
 
 render-ci-pipeline:
     ./scripts/render-ci-pipeline.sh
 
-format: format-dhall prettier format-shfmt
+format: format-dhall prettier format-shfmt format-golang
 
 lint: lint-dhall shellcheck
 
 prettier:
     yarn run prettier
+
+format-golang:
+    ./scripts/go-format.sh
+
+freeze: freeze-dhall
+
+freeze-dhall:
+    ./scripts/dhall-freeze.sh
+
+test: test-golang
+
+test-golang:
+    ./scripts/go-test.sh
 
 format-dhall:
     ./scripts/dhall-format.sh

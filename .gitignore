@@ -1,3 +1,8 @@
+
+# Created by https://www.toptal.com/developers/gitignore/api/yarn,node,go,vscode
+# Edit at https://www.toptal.com/developers/gitignore?templates=yarn,node,go,vscode
+
+### Go ###
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -14,8 +19,9 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-# Created by https://www.toptal.com/developers/gitignore/api/node,yarn
-# Edit at https://www.toptal.com/developers/gitignore?templates=node,yarn
+### Go Patch ###
+/vendor/
+/Godeps/
 
 ### Node ###
 # Logs
@@ -73,6 +79,9 @@ typings/
 # Optional eslint cache
 .eslintcache
 
+# Optional stylelint cache
+.stylelintcache
+
 # Microbundle cache
 .rpt2_cache/
 .rts2_cache_cjs/
@@ -91,9 +100,11 @@ typings/
 # dotenv environment variables file
 .env
 .env.test
+.env*.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
+.parcel-cache
 
 # Next.js build output
 .next
@@ -126,19 +137,28 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
+### vscode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
 ### yarn ###
 # https://yarnpkg.com/advanced/qa#which-files-should-be-gitignored
 
-# .yarn/unplugged and .yarn/build-state.yml should likely always be ignored since
-# they typically hold machine-specific build artifacts. Ignoring them might however
-# prevent Zero-Installs from working (to prevent this, set enableScripts to false).
-.yarn/unplugged
-.yarn/build-state.yml
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
 
-# .yarn/cache and .pnp.* may be safely ignored, but you'll need to run yarn install
-# to regenerate them between each branch switch.
-# Uncomment the following lines if you're not using Zero-Installs:
-# .yarn/cache
-# .pnp.*
+# if you are NOT using Zero-installs, then:
+# comment the following lines
+# !.yarn/cache
 
-# End of https://www.toptal.com/developers/gitignore/api/node,yarn
+# and uncomment the following lines
+.pnp.*
+
+# End of https://www.toptal.com/developers/gitignore/api/yarn,node,go,vscode

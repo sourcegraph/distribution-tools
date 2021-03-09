@@ -33,7 +33,7 @@ jobs:
         name: Check that dhall files are formatted
         run: just format-dhall
   dhallFreeze:
-    name: dhall-lint
+    name: dhall-freeze
     runs-on: ubuntu-latest
     steps:
       - uses: 'actions/checkout@v2'

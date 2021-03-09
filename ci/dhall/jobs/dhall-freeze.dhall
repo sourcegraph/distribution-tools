@@ -4,7 +4,7 @@ let Setup = ../setup.dhall
 
 in  Setup.MakeJob
       Setup.JobArgs::{
-      , name = "dhall-lint"
+      , name = "dhall-freeze"
       , additionalSteps =
         [ GitHubActions.Step::{
           , name = Some "Check that dhall files are linted properly"

@@ -28,18 +28,20 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err := app(image, token); err != nil {
+	result, err := app(image, token)
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		os.Exit(1)
 	}
+	fmt.Println(result)
 
 }
 
-func app(image, token string) error {
+func app(image, token string) (string, error) {
 
 	imgRef, err := fetchtag.Transform(image)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	fetcher := fetchtag.Fetcher{
@@ -52,7 +54,7 @@ func app(image, token string) error {
 		// create repo struct from imageRef
 		tag, digest, err := fetcher.FindLatestImageByTime()
 		if err != nil {
-			return err
+			return "", err
 		}
 		imgRef.Version = tag
 		imgRef.Sha256 = digest
@@ -60,11 +62,9 @@ func app(image, token string) error {
 		// fetch only digest (faster)
 		digest, err := fetcher.FetchImageDigest(imgRef.Version)
 		if err != nil {
-			return err
+			return "", err
 		}
 		imgRef.Sha256 = digest
 	}
-	fmt.Printf("%s/%s:%s@%s", imgRef.Registry, imgRef.Name, imgRef.Version, imgRef.Sha256)
-
-	return nil
+	return fmt.Sprintf("%s/%s:%s@%s", imgRef.Registry, imgRef.Name, imgRef.Version, imgRef.Sha256), nil
 }

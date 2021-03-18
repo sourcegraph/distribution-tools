@@ -16,10 +16,9 @@ import (
 	"github.com/inconshreveable/log15"
 	flag "github.com/spf13/pflag"
 
-	// THESE must be imported for the go-digest pkg to work
+	// must be imported for the go-digest pkg to work
 	// these are the supported images digests we can use
 	_ "crypto/sha256"
-	_ "crypto/sha512"
 )
 
 const ShortDescription = "finds docker image tags in input files and adds them as Dhall records to a list"

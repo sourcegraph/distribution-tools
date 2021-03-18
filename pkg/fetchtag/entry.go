@@ -46,12 +46,6 @@ func Transform(image string) (dockerimg.ImageReference, error) {
 	}
 	imgRef.Registry = d
 
-	//if dockerimg.DomainIsNotHostName(d) {
-	//	imgRef.Name = fmt.Sprintf("%s/%s", d, path)
-	//	imgRef.Registry = ""
-	//}
-
-	// ?
 	imgRef.Key = imgRef.Name
 
 	// we only allow sha256... do we need both crypto libs ?
@@ -59,7 +53,5 @@ func Transform(image string) (dockerimg.ImageReference, error) {
 		imgRef.Sha256 = strings.TrimPrefix(digested.Digest().String(),
 			"sha256:")
 	}
-
 	return imgRef, nil
-
 }

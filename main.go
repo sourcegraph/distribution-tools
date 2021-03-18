@@ -14,19 +14,18 @@ func main() {
 	var image string
 	var help bool
 	flag.StringVarP(&image, "image", "i", "", "image to update, in registry/repo/tag format")
-	flag.BoolVarP(&help, "help", "h", false, "use IMAGE_FETCH_TOKEN env var to provide registry access")
+	flag.BoolVarP(&help, "help", "h", false, "print help")
 
 	flag.Parse()
 
+	if help || image == "" {
+		flag.PrintDefaults()
+		os.Exit(1)
+	}
 	token := os.Getenv("IMAGE_FETCH_TOKEN")
 	if token == "" {
 		fmt.Println("Use the env var IMAGE_FETCH_TOKEN to provide the registry access token ")
 		os.Exit(1)
-	}
-
-	if help || image == "" {
-		flag.PrintDefaults()
-		os.Exit(0)
 	}
 
 	if err := app(image, token); err != nil {

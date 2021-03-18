@@ -111,7 +111,7 @@ func (r *Fetcher) imageTagList() (tagListResp, error) {
 //
 //  $ curl -s -D - -H "Authorization: Bearer $token" -H "Accept: application/vnd.docker.distribution.manifest.v2+json" https://index.docker.io/v2/sourcegraph/server/manifests/3.12.1 | grep Docker-Content-Digest
 //
-func (r *Fetcher) fetchImageDigest(tag string) (string, error) {
+func (r *Fetcher) FetchImageDigest(tag string) (string, error) {
 	req, err := http.NewRequest("GET",
 		fmt.Sprintf("https://%s/v2/%s/manifests/%s", r.Registry, r.Name, tag), nil)
 	if err != nil {

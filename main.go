@@ -59,6 +59,11 @@ func app(image, token string) error {
 		imgRef.Sha256 = digest
 	} else if imgRef.Sha256 == "" {
 		// fetch only digest (faster)
+		digest, err := fetcher.FetchImageDigest(imgRef.Version)
+		if err != nil {
+			return err
+		}
+		imgRef.Sha256 = digest
 	}
 	fmt.Printf("%s/%s:%s@%s", imgRef.Registry, imgRef.Name, imgRef.Version, imgRef.Sha256)
 

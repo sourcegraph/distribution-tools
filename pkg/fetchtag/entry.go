@@ -7,9 +7,11 @@ import (
 	"github.com/sourcegraph/distribution-tools/pkg/dockerimg"
 )
 
+var DEBUG_MODE = false
+
 func Transform(image string) (dockerimg.ImageReference, error) {
 
-	println("looking for image", image)
+	debugPrint("looking for image " + image)
 
 	imgRef := dockerimg.ImageReference{}
 
@@ -24,7 +26,7 @@ func Transform(image string) (dockerimg.ImageReference, error) {
 
 	tagged, ok := r.(dockerimg.Tagged)
 	if !ok {
-		println("no tag")
+		debugPrint("no tag")
 	} else {
 		// naming
 		imgRef.Version = tagged.Tag()
@@ -35,13 +37,13 @@ func Transform(image string) (dockerimg.ImageReference, error) {
 	if strings.Contains(path, "/") {
 		imgRef.Name = path
 	} else {
-		println("no provided project")
+		debugPrint("no provided project")
 		imgRef.Name = fmt.Sprintf("%s/%s", defaultProject, path)
 	}
 
 	d := dockerimg.Domain(named)
 	if d == "" {
-		println("no domain")
+		debugPrint("no domain")
 		d = defaultRegistry
 	}
 	imgRef.Registry = d
@@ -54,4 +56,11 @@ func Transform(image string) (dockerimg.ImageReference, error) {
 			"sha256:")
 	}
 	return imgRef, nil
+}
+
+func debugPrint(s string) {
+	if DEBUG_MODE == true {
+		println(s)
+	}
+	return
 }

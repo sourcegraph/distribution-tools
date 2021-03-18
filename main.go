@@ -9,6 +9,8 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
+var DEBUG_MODE = false
+
 func main() {
 
 	var image string
@@ -26,6 +28,12 @@ func main() {
 	if token == "" {
 		fmt.Println("Use the env var IMAGE_FETCH_TOKEN to provide the registry access token ")
 		os.Exit(1)
+	}
+
+	dbg := os.Getenv("DEBUG_MODE")
+	if dbg != "" {
+		DEBUG_MODE = true
+		fetchtag.DEBUG_MODE = true
 	}
 
 	result, err := app(image, token)

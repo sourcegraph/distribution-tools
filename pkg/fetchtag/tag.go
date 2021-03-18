@@ -10,11 +10,10 @@ import (
 )
 
 // Largely copied from https://github.com/slimsag/update-docker-tags/blob/201509b910e3a78948ec8951c7b7fb33dd711931/update-docker-tags.go
-// Thank you @slimsag
 
 const (
 	// TODO Get these from config
-	defaultRegistry = "gcr.io"
+	defaultRegistry = "us.gcr.io"
 	defaultProject  = "sourcegraph-dev"
 )
 

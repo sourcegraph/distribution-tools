@@ -9,10 +9,7 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-var DEBUG_MODE = false
-
 func main() {
-
 	var image string
 	var help bool
 	flag.StringVarP(&image, "image", "i", "", "image to update, in registry/repo/tag format")
@@ -32,8 +29,7 @@ func main() {
 
 	dbg := os.Getenv("DEBUG_MODE")
 	if dbg != "" {
-		DEBUG_MODE = true
-		fetchtag.DEBUG_MODE = true
+		fetchtag.DebugMode = true
 	}
 
 	result, err := app(image, token)
@@ -42,11 +38,8 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println(result)
-
 }
-
 func app(image, token string) (string, error) {
-
 	imgRef, err := fetchtag.Transform(image)
 	if err != nil {
 		return "", err

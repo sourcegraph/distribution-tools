@@ -165,24 +165,13 @@ func Path(named Named) (name string) {
 	return path
 }
 
+// nolint:gocritic
 func splitDomain(name string) (string, string) {
 	match := anchoredNameRegexp.FindStringSubmatch(name)
 	if len(match) != 3 {
 		return "", name
 	}
 	return match[1], match[2]
-}
-
-// SplitHostname splits a named reference into a
-// hostname and name string. If no valid hostname is
-// found, the hostname is empty and the full value
-// is returned as name
-// DEPRECATED: Use Domain or Path
-func SplitHostname(named Named) (string, string) {
-	if r, ok := named.(namedRepository); ok {
-		return r.Domain(), r.Path()
-	}
-	return splitDomain(named.Name())
 }
 
 // Parse parses s and returns a syntactically valid Reference.
@@ -298,6 +287,7 @@ func WithTag(name Named, tag string) (NamedTagged, error) {
 
 // WithDigest combines the name from "name" and the digest from "digest" to form
 // a reference incorporating both the name and the digest.
+// nolint:gocritic
 func WithDigest(name Named, digest digest.Digest) (Canonical, error) {
 	if !anchoredDigestRegexp.MatchString(digest.String()) {
 		return nil, ErrDigestInvalidFormat
@@ -320,15 +310,6 @@ func WithDigest(name Named, digest digest.Digest) (Canonical, error) {
 		namedRepository: repo,
 		digest:          digest,
 	}, nil
-}
-
-// TrimNamed removes any tag or digest from the named reference.
-func TrimNamed(ref Named) Named {
-	domain, path := SplitHostname(ref)
-	return repository{
-		domain: domain,
-		path:   path,
-	}
 }
 
 func getBestReferenceType(ref reference) Reference {

@@ -7,10 +7,9 @@ import (
 	"github.com/sourcegraph/distribution-tools/pkg/dockerimg"
 )
 
-var DEBUG_MODE = false
+var DebugMode = false
 
 func Transform(image string) (dockerimg.ImageReference, error) {
-
 	debugPrint("looking for image " + image)
 
 	imgRef := dockerimg.ImageReference{}
@@ -59,8 +58,7 @@ func Transform(image string) (dockerimg.ImageReference, error) {
 }
 
 func debugPrint(s string) {
-	if DEBUG_MODE == true {
+	if DebugMode {
 		println(s)
 	}
-	return
 }

@@ -24,54 +24,6 @@ type Fetcher struct {
 	AuthToken string
 }
 
-// Effectively the same as:
-//
-// 	$ export token=$(curl -s "https://auth.docker.io/token?service=registry.docker.io&scope=repository:sourcegraph/server:pull" | jq -r .token)
-//
-func fetchAuthToken(repositoryName string) (string, error) {
-	resp, err := http.Get(fmt.Sprintf("https://auth.docker.io/token?service=registry.docker.io&scope=Fetcher:%s:pull", repositoryName))
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-	result := struct {
-		Token string
-	}{}
-	err = json.NewDecoder(resp.Body).Decode(&result)
-	if err != nil {
-		return "", err
-	}
-	return result.Token, nil
-}
-
-// Effectively the same as:
-//
-// 	$ curl -H "Authorization: Bearer $token" https://index.docker.io/v2/sourcegraph/server/tags/list
-// or curl -H "Authorization: Bearer $token" https://us.gcr.io/v2/sourcegraph-dev/chrome/tags/list
-// see https://docs.docker.com/registry/spec/api/#listing-image-tags
-func (r *Fetcher) fetchAllTags() ([]string, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://%s/v2/%s/tags/list", r.Registry, r.Name), nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Authorization", "Bearer "+r.AuthToken)
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	result := struct {
-		Tags []string
-	}{}
-	err = json.NewDecoder(resp.Body).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	return result.Tags, nil
-}
-
 type tagListResp struct {
 	Manifest map[string]manifest
 	Name     string
@@ -80,7 +32,7 @@ type tagListResp struct {
 
 type manifest struct {
 	ImageSizeBytes string
-	LayerId        string
+	LayerID        string
 	MediaType      string
 	Tag            []string
 	TimeCreatedMs  string

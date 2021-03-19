@@ -39,6 +39,9 @@ type manifest struct {
 	TimeUploadedMs string
 }
 
+// 	$ curl -H "Authorization: Bearer $token" https://index.docker.io/v2/sourcegraph/server/tags/list
+// or curl -H "Authorization: Bearer $token" https://us.gcr.io/v2/sourcegraph-dev/chrome/tags/list
+// see https://docs.docker.com/registry/spec/api/#listing-image-tags
 // TODO: ptr return
 func (r *Fetcher) imageTagList() (tagListResp, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("https://%s/v2/%s/tags/list", r.Registry, r.Name), nil)

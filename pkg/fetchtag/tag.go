@@ -56,6 +56,13 @@ func (r *Fetcher) imageTagList() (tagListResp, error) {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode == http.StatusUnauthorized {
+		return tagListResp{}, fmt.Errorf("recieved %s: the access token may have expired", resp.Status)
+	}
+	if resp.StatusCode > http.StatusUnauthorized || resp.StatusCode < http.StatusOK {
+		return tagListResp{}, fmt.Errorf("unable to proceed, recieved  %s: ", resp.Status)
+	}
+
 	result := tagListResp{}
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	return result, err
@@ -80,6 +87,13 @@ func (r *Fetcher) FetchImageDigest(tag string) (string, error) {
 		return "", err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		return "", fmt.Errorf("received %s: the access token may have expired", resp.Status)
+	}
+	if resp.StatusCode > http.StatusUnauthorized || resp.StatusCode < http.StatusOK {
+		return "", fmt.Errorf("unable to proceed, received  %s: ", resp.Status)
+	}
 
 	return resp.Header.Get("Docker-Content-Digest"), nil
 }
